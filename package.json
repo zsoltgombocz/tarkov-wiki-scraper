@@ -1,0 +1,11 @@
+{
+  "name": "tarkov-wiki-scraper",
+  "version": "1.0.0",
+  "description": "Simple NodeJS project to scrape and then store https://escapefromtarkov.fandom.com/ data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gömböcz Zsolt",
+  "license": "MIT"
+}
