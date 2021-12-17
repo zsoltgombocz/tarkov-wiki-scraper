@@ -4,6 +4,8 @@
   "description": "Simple NodeJS project to scrape and then store https://escapefromtarkov.fandom.com/ data.",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint app",
+    "start": "node app/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Gömböcz Zsolt",
