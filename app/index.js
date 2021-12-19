@@ -11,10 +11,12 @@ let hideout_modules = {};
                 0 => {
                     item_name: item_name,
                     item_amount: int,
+                    item_link: link
                 },
                 1 => {
                     item_name: item_name1,
                     item_amount: int,
+                    item_link: link
                 },
             ]
         ]
