@@ -7,7 +7,7 @@ let hideout_modules = {};
     0 => {
         module_name,
         levels: [
-            0 => [
+            0 => {
                 items: [
                     0 => {
                         item_name: item_name,
@@ -59,9 +59,7 @@ let hideout_modules = {};
                         stat_link: link
                     },
                 ]
-
-                
-            ]
+            }
         ]
     }
 ]*/
