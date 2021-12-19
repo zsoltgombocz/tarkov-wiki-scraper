@@ -32,8 +32,36 @@ const getHideoutModules = async (base_url) => {
             for(let i = 3; i <= 5; i++) {
                 let tr = $(table.find('tr:nth-child('+ i +')'));
                 if(tr.length !== 0) {
-                    let levels_of_modules =  modules[indexOfTable].levels;
-                    levels_of_modules[i-3] = {};
+                    let list_of_reqs = $(tr.find('td > ul').first());
+
+                    modules[indexOfTable].levels[i-3] = [];
+
+                    list_of_reqs.find('li').each((index_of_lis, li) => {
+                        li = $(li);
+                        if(li.text().includes("Roubles") || li.text().includes("Dollars") || li.text().includes("Euros")){
+                            //Here comes the money requirements
+                        }else if(li.text().includes("LL2") || li.text().includes("LL3") || li.text().includes("LL4")) {
+                            //Trader level requirements
+                        }else if(li.text().includes("Level")) {
+                            //Hideout modules or player stat (strenght etc...)  
+                        }else if(li.text().includes("Purchase")) {
+                            //Purchase of any game expansion
+                        }else {
+                            //item requirements
+                            let li_html_splitted = li.html().split(" <a ");
+                            const amount = li_html_splitted[0];
+
+                            li_html_splitted = li_html_splitted[1].split("\"");
+                            const name = li_html_splitted[3];
+                            const link = li_html_splitted[1];
+                            let item_requirements_array = modules[indexOfTable].levels[i-3];
+                            item_requirements_array.push({                       
+                                item_name: name,
+                                item_amount: amount,
+                                item_link: link 
+                            });
+                        }
+                    });
                 }
                
             }
