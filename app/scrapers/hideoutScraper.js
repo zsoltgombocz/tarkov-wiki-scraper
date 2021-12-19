@@ -34,7 +34,12 @@ const getHideoutModules = async (base_url) => {
                 if(tr.length !== 0) {
                     let list_of_reqs = $(tr.find('td > ul').first());
 
-                    modules[indexOfTable].levels[i-3] = [];
+                    modules[indexOfTable].levels[i-3] = {};
+                    modules[indexOfTable].levels[i-3].items = [];
+                    modules[indexOfTable].levels[i-3].money = [];
+                    modules[indexOfTable].levels[i-3].trader_lvl = [];
+                    modules[indexOfTable].levels[i-3].hideout_module = [];
+                    modules[indexOfTable].levels[i-3].player_stat = [];
 
                     list_of_reqs.find('li').each((index_of_lis, li) => {
                         li = $(li);
@@ -54,7 +59,7 @@ const getHideoutModules = async (base_url) => {
                             li_html_splitted = li_html_splitted[1].split("\"");
                             const name = li_html_splitted[3];
                             const link = li_html_splitted[1];
-                            let item_requirements_array = modules[indexOfTable].levels[i-3];
+                            let item_requirements_array = modules[indexOfTable].levels[i-3].items;
                             item_requirements_array.push({                       
                                 item_name: name,
                                 item_amount: amount,
