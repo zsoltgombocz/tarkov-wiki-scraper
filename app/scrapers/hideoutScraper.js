@@ -25,6 +25,19 @@ const getHideoutModules = async (base_url) => {
                 levels: []
             };
         });
+
+        $('.wikitable').each((indexOfTable, e) => {
+
+            const table = $(e);
+            for(let i = 3; i <= 5; i++) {
+                let tr = $(table.find('tr:nth-child('+ i +')'));
+                if(tr.length !== 0) {
+                    let levels_of_modules =  modules[indexOfTable].levels;
+                    levels_of_modules[i-3] = {};
+                }
+               
+            }
+        });
     }
     modules.pop();
 
