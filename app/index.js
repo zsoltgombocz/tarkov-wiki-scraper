@@ -58,6 +58,9 @@ let hideout_modules = {};
                         stat_level: req_level,
                         stat_link: link
                     },
+                ],
+                purchase: [
+                    string, string
                 ]
             }
         ]
