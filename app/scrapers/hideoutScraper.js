@@ -44,13 +44,48 @@ const getHideoutModules = async (base_url) => {
                     list_of_reqs.find('li').each((index_of_lis, li) => {
                         li = $(li);
                         if(li.text().includes("Roubles") || li.text().includes("Dollars") || li.text().includes("Euros")){
-                            //Here comes the money requirements
+                            //Money requirements
+                            modules[indexOfTable].levels[i-3].money.push(li.text());
                         }else if(li.text().includes("LL2") || li.text().includes("LL3") || li.text().includes("LL4")) {
                             //Trader level requirements
+                            let li_splitted = li.html().split("\"");
+                            let name = li_splitted[3];
+                            let level = li_splitted[4].substring(li_splitted[4].length-1, li_splitted[4].length);
+                            let link = li_splitted[1];
+                            modules[indexOfTable].levels[i-3].trader_lvl.push({
+                                trader_name: name,
+                                trader_level: level,
+                                trader_link: link
+                            });
                         }else if(li.text().includes("Level")) {
                             //Hideout modules or player stat (strenght etc...)  
+                            if(li.find('a').attr('title') === "Hideout") {
+                                let li_splitted_hideout = li.html().split("\"");
+                                let name = li_splitted_hideout[4].substring(1, li_splitted_hideout[4].length-4);
+                                let level = li_splitted_hideout[0].split("<")[0].substring(6, 7);
+                                let link = li_splitted_hideout[1];
+                                
+                                modules[indexOfTable].levels[i-3].hideout_module.push({
+                                    module_name: name,
+                                    module_level: level,
+                                    module_link: link
+                                });
+                               
+                            }else{
+                                let li_splitted_stats = li.html().split("\"");
+                                let name = li_splitted_stats[3];
+                                let level = li_splitted_stats[4].substring(li_splitted_stats[4].length-1, li_splitted_stats[4].length);
+                                let link = li_splitted_stats[1]
+                                
+                                modules[indexOfTable].levels[i-3].player_stat.push({
+                                    stat_name: name,
+                                    stat_level: level,
+                                    stat_link: link
+                                });
+                            }
                         }else if(li.text().includes("Purchase")) {
                             //Purchase of any game expansion
+                            modules[indexOfTable].levels[i-3].purchase = [li.html()];
                         }else {
                             //item requirements
                             let li_html_splitted = li.html().split(" <a ");
@@ -59,8 +94,8 @@ const getHideoutModules = async (base_url) => {
                             li_html_splitted = li_html_splitted[1].split("\"");
                             const name = li_html_splitted[3];
                             const link = li_html_splitted[1];
-                            let item_requirements_array = modules[indexOfTable].levels[i-3].items;
-                            item_requirements_array.push({                       
+    
+                            modules[indexOfTable].levels[i-3].items.push({                       
                                 item_name: name,
                                 item_amount: amount,
                                 item_link: link 
