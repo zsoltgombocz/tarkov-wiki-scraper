@@ -1,15 +1,79 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-const getHideoutModules = async (base_url) => {
+/*hideout_modules = [
+    0 => {
+        module_name,
+        levels: [
+            0 => {
+                items: [
+                    0 => {
+                        item_name: item_name,
+                        item_amount: int,
+                        item_link: link
+                    },
+                    1 => {
+                        item_name: item_name1,
+                        item_amount: int,
+                        item_link: link
+                    },
+                ], 
+                money: [
+                    'string', 'string;
+                ],
+                trader_lvl: [
+                    0 => {
+                        trader_name: trader_name,
+                        trader_level: req_level,
+                        trader_link: link
+                    },
+                    1 => {
+                        trader_name: trader_name1,
+                        trader_level: req_level,
+                        trader_link: link
+                    },
+                ],
+                hideout_module: [
+                    0 => {
+                        module_name: module,
+                        module_level: req_level,
+                        module_link: link
+                    },
+                    1 => {
+                        module_name: module1,
+                        module_level: req_level,
+                        module_link: link
+                    },
+                ],
+                player_stat: [
+                    0 => {
+                        stat_name: stat,
+                        stat_level: req_level,
+                        stat_link: link
+                    },
+                    1 => {
+                        stat_name: stat1,
+                        stat_level: req_level,
+                        stat_link: link
+                    },
+                ],
+                purchase: [
+                    string, string
+                ]
+            }
+        ]
+    }
+]*/
+
+const getHideoutModules = async () => {
     let modules = [];
     let $ = null;
     try {
-        const {data} = await axios.get('https://escapefromtarkov.fandom.com/wiki/Hideout', {
+        const {data} = await axios.get("https://escapefromtarkov.fandom.com/wiki/Hideout", {
             headers: {
-                Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-                Host: 'escapefromtarkov.fandom.com',
-                'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+                Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+                Host: "escapefromtarkov.fandom.com",
+                "User-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36"
             },
         });
 
@@ -17,22 +81,22 @@ const getHideoutModules = async (base_url) => {
     } catch (error) {
         console.error("Error while scraping hideout modules. \nError message: " + error);
     } finally {
-        $('.wikitable tr:first-child th:first-child').each((i, e) => {
+        $(".wikitable tr:first-child th:first-child").each((i, e) => {
             let html = $(e).html();
-            module_name  = html.toString().replace(/(<).*/, "").trim();
+            const module_name  = html.toString().replace(/(<).*/, "").trim();
             modules[i] = {
                 module_name,
                 levels: []
             };
         });
 
-        $('.wikitable').each((indexOfTable, e) => {
+        $(".wikitable").each((indexOfTable, e) => {
 
             const table = $(e);
             for(let i = 3; i <= 5; i++) {
-                let tr = $(table.find('tr:nth-child('+ i +')'));
+                let tr = $(table.find("tr:nth-child("+ i +")"));
                 if(tr.length !== 0) {
-                    let list_of_reqs = $(tr.find('td > ul').first());
+                    let list_of_reqs = $(tr.find("td > ul").first());
 
                     modules[indexOfTable].levels[i-3] = {};
                     modules[indexOfTable].levels[i-3].items = [];
@@ -41,7 +105,7 @@ const getHideoutModules = async (base_url) => {
                     modules[indexOfTable].levels[i-3].hideout_module = [];
                     modules[indexOfTable].levels[i-3].player_stat = [];
 
-                    list_of_reqs.find('li').each((index_of_lis, li) => {
+                    list_of_reqs.find("li").each((index_of_lis, li) => {
                         li = $(li);
                         if(li.text().includes("Roubles") || li.text().includes("Dollars") || li.text().includes("Euros")){
                             //Money requirements
@@ -59,7 +123,7 @@ const getHideoutModules = async (base_url) => {
                             });
                         }else if(li.text().includes("Level")) {
                             //Hideout modules or player stat (strenght etc...)  
-                            if(li.find('a').attr('title') === "Hideout") {
+                            if(li.find("a").attr("title") === "Hideout") {
                                 let li_splitted_hideout = li.html().split("\"");
                                 let name = li_splitted_hideout[4].substring(1, li_splitted_hideout[4].length-4);
                                 let level = li_splitted_hideout[0].split("<")[0].substring(6, 7);
@@ -75,7 +139,7 @@ const getHideoutModules = async (base_url) => {
                                 let li_splitted_stats = li.html().split("\"");
                                 let name = li_splitted_stats[3];
                                 let level = li_splitted_stats[4].substring(li_splitted_stats[4].length-1, li_splitted_stats[4].length);
-                                let link = li_splitted_stats[1]
+                                let link = li_splitted_stats[1];
                                 
                                 modules[indexOfTable].levels[i-3].player_stat.push({
                                     stat_name: name,
