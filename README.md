@@ -1,1 +1,1 @@
-tarkov-wiki-scraper
+Just a hobby project. Web scraping can be pretty difficult and entertaining, also I am working on this project for pure learning, there are several Tarkov APIs, also raw data that contains everything from the game items, but I wanted to do it myself too.
